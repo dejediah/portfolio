@@ -7,23 +7,46 @@
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 .home {
   position: relative;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
+  width: 100%;
+  height: 100vh;
+  /* Use dynamic viewport height for mobile browsers with auto-hiding URL bars */
+  height: 100dvh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(190, 234, 235, 0.846);
   overflow: hidden;
 }
 
+/* Background Images: Fill absolute container boundaries without 100vw overflow */
+.bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  transition: transform 0.2s ease-out;
+}
+
+/* Center Content Stack */
 .centerContainer {
   position: relative;
   z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding: 0 1rem;
 }
 
 .typingRow {
@@ -37,11 +60,11 @@ body {
   display: inline-block;
   font-family: 'Alata', sans-serif;
   color: white;
-  font-size: clamp(3rem, 8vw, 10rem);
+  /* Adjust size range to prevent breaking on narrow screens */
+  font-size: clamp(2.5rem, 7vw, 8rem);
   letter-spacing: 0.04em;
   white-space: nowrap;
   line-height: 1;
-  min-width: 0;
 }
 
 .cursor {
@@ -54,19 +77,28 @@ body {
   animation: blink 0.8s step-end infinite;
 }
 
-.bg-image {
+/* Subtitle: Position relative to viewport percentages rather than large rem values */
+.bottom-subtitle {
   position: absolute;
+  bottom: 8%; /* Locks position relative to screen height */
+  z-index: 4;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(0.85rem, 1.8vw, 1.25rem);
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
   pointer-events: none;
   user-select: none;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: 0;
-  opacity: 1;
-  transition: transform 0.2s ease-out;
+  white-space: nowrap;
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Foreground Wrapper handles parallax movement & transition */
+.bottom-subtitle .divider {
+  margin: 0 0.5em;
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+/* Foreground Wrappers */
 .fg-wrapper {
   position: absolute;
   pointer-events: none;
@@ -75,12 +107,24 @@ body {
   transition: transform 0.2s ease-out;
 }
 
-/* Inner images handle floating animation */
+.fg-wrapper.left {
+  left: 0;
+  bottom: 0;
+}
+
+.fg-wrapper.right {
+  right: 0;
+  bottom: 0;
+}
+
 .fg-image {
   pointer-events: none;
   user-select: none;
   opacity: 0.95;
   display: block;
+  /* Constrain size on smaller screens */
+  max-width: clamp(150px, 25vw, 400px);
+  height: auto;
 }
 
 .fg-image.left {
@@ -91,6 +135,7 @@ body {
   animation: floatSlow 6s ease-in-out infinite alternate-reverse;
 }
 
+/* Keyframe Animations */
 @keyframes floatSlow {
   0% {
     transform: translate3d(0, 0, 0) rotate(0deg);
@@ -101,37 +146,10 @@ body {
 }
 
 @keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  50.01%, 100% {
-    opacity: 0;
-  }
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
 }
 
-.bottom-subtitle {
-  position: absolute;
-  bottom: 22.5rem;
-  z-index: 4;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(0.9rem, 2vw, 1.25rem);
-  letter-spacing: 0.15em;
-  text-transform: lowercase;
-  pointer-events: none;
-  user-select: none;
-  
-  /* Combines entry fade-in-up with repeating subtle float */
-  animation: 
-    fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.bottom-subtitle .divider {
-  margin: 0 0.5em;
-  opacity: 0.6;
-  font-weight: 300;
-}
-
-/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
