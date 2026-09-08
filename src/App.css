@@ -1,55 +1,63 @@
 :root {
-  background-color: rgba(190, 234, 235, 0.846);
-  min-height: 100vh;
-  margin: 0;
-  font-family: 'Alata', sans-serif;
+  --bg-color: rgba(190, 234, 235, 0.85);
+  --text-color: #ffffff;
+  --font-main: 'Alata', sans-serif;
+  --user-select-none: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  overflow: hidden;
+  background-color: var(--bg-color);
+  font-family: var(--font-main);
+  overscroll-behavior: none;
 }
 
 .home {
   position: relative;
   width: 100%;
   height: 100vh;
-  /* Use dynamic viewport height for mobile browsers with auto-hiding URL bars */
-  height: 100dvh; 
+  height: 100lvh; /* Ignores dynamic address bar shifts on mobile */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(190, 234, 235, 0.846);
   overflow: hidden;
+  background-color: var(--bg-color);
 }
 
-/* Background Images: Fill absolute container boundaries without 100vw overflow */
+/* Background Layers */
 .bg-image {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   pointer-events: none;
-  user-select: none;
+  user-select: var(--user-select-none);
   z-index: 0;
   transition: transform 0.2s ease-out;
 }
 
-/* Center Content Stack */
-.centerContainer {
+.center-container {
   position: relative;
   z-index: 2;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 0 1rem;
+  /* Shifts the entire text group up by 10px */
+  transform: translateY(-10px); 
 }
 
-.typingRow {
+.typing-row {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
@@ -58,10 +66,9 @@ body {
 
 .name {
   display: inline-block;
-  font-family: 'Alata', sans-serif;
-  color: white;
-  /* Adjust size range to prevent breaking on narrow screens */
-  font-size: clamp(2.5rem, 7vw, 8rem);
+  font-family: var(--font-main);
+  color: var(--text-color);
+  font-size: clamp(2.5rem, 8vw, 9rem);
   letter-spacing: 0.04em;
   white-space: nowrap;
   line-height: 1;
@@ -70,24 +77,25 @@ body {
 .cursor {
   display: inline-block;
   width: 0.12em;
-  height: 0.9em;
-  background-color: white;
+  height: 0.85em;
+  background-color: var(--text-color);
   margin-left: 0.08em;
   transform: translateY(-0.04em);
   animation: blink 0.8s step-end infinite;
 }
 
-/* Subtitle: Position relative to viewport percentages rather than large rem values */
+/* Subtitle positioned directly beneath the name */
 .bottom-subtitle {
-  position: absolute;
-  bottom: 8%; /* Locks position relative to screen height */
-  z-index: 4;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(0.85rem, 1.8vw, 1.25rem);
+  /* Removed absolute positioning */
+  position: relative; 
+  margin-top: 0.75rem; /* Gap between the name and subtitle */
+  z-index: 3;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(0.85rem, 2vw, 1.25rem);
   letter-spacing: 0.15em;
   text-transform: lowercase;
   pointer-events: none;
-  user-select: none;
+  user-select: var(--user-select-none);
   white-space: nowrap;
   animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -98,11 +106,17 @@ body {
   font-weight: 300;
 }
 
-/* Foreground Wrappers */
+.bottom-subtitle .divider {
+  margin: 0 0.5em;
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+/* Foreground Assets */
 .fg-wrapper {
   position: absolute;
   pointer-events: none;
-  user-select: none;
+  user-select: var(--user-select-none);
   z-index: 3;
   transition: transform 0.2s ease-out;
 }
@@ -119,11 +133,10 @@ body {
 
 .fg-image {
   pointer-events: none;
-  user-select: none;
+  user-select: var(--user-select-none);
   opacity: 0.95;
   display: block;
-  /* Constrain size on smaller screens */
-  max-width: clamp(150px, 25vw, 400px);
+  width: clamp(100vw, 100vw, 90vw);
   height: auto;
 }
 
@@ -135,7 +148,7 @@ body {
   animation: floatSlow 6s ease-in-out infinite alternate-reverse;
 }
 
-/* Keyframe Animations */
+/* Keyframes */
 @keyframes floatSlow {
   0% {
     transform: translate3d(0, 0, 0) rotate(0deg);
