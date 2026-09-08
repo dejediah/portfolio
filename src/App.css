@@ -1,0 +1,144 @@
+:root {
+  background-color: rgba(190, 234, 235, 0.846);
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Alata', sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.home {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: rgba(190, 234, 235, 0.846);
+  overflow: hidden;
+}
+
+.centerContainer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.typingRow {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.name {
+  display: inline-block;
+  font-family: 'Alata', sans-serif;
+  color: white;
+  font-size: clamp(3rem, 8vw, 10rem);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  line-height: 1;
+  min-width: 0;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.12em;
+  height: 0.9em;
+  background-color: white;
+  margin-left: 0.08em;
+  transform: translateY(-0.04em);
+  animation: blink 0.8s step-end infinite;
+}
+
+.bg-image {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 1;
+  transition: transform 0.2s ease-out;
+}
+
+/* Foreground Wrapper handles parallax movement & transition */
+.fg-wrapper {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+  transition: transform 0.2s ease-out;
+}
+
+/* Inner images handle floating animation */
+.fg-image {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.95;
+  display: block;
+}
+
+.fg-image.left {
+  animation: floatSlow 5s ease-in-out infinite alternate;
+}
+
+.fg-image.right {
+  animation: floatSlow 6s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatSlow {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(0, -10px, 0) rotate(0.5deg);
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  50.01%, 100% {
+    opacity: 0;
+  }
+}
+
+.bottom-subtitle {
+  position: absolute;
+  bottom: 22.5rem;
+  z-index: 4;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  pointer-events: none;
+  user-select: none;
+  
+  /* Combines entry fade-in-up with repeating subtle float */
+  animation: 
+    fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.bottom-subtitle .divider {
+  margin: 0 0.5em;
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
